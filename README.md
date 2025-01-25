@@ -39,7 +39,7 @@ Développer un système capable de prédire si une **paire de rapports de bug so
   - `scikit-learn` pour les modèles de machine learning.
   - `pandas` et `numpy` pour le traitement des données.
   - `matplotlib` et `seaborn` pour la visualisation.
-  - `beautifulsoup` pour le scrapping des données.
+  - `beautifulsoup` pour scraper des données.
 
 ---
 
