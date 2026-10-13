@@ -1,51 +1,31 @@
-# ML-Duplicate-Ellipse
+# Duplicate bug report detection (Eclipse)
 
-## Duplicate Bug Report Detection
+When users file the same bug twice, a bug tracker fills with duplicates that waste triage time.
+This project predicts whether a pair of Eclipse bug reports describes the same bug, from the raw
+HTML pages of the reports.
 
-**TP initialement créé par Irving Muller Rodrigues pour le cours de fouilles de données de Montréal.**
+**Result: 94% accuracy on the validation pairs** (92% on training), with a logistic regression on
+four features. The confusion matrix is balanced: 1,888 true negatives and 1,854 true positives.
 
-- **Date de remise** : 08/11/2024
+## Pipeline
 
----
+1. **Web scraping:** extraction of the summary, description, product and component from each
+   report's HTML page (BeautifulSoup).
+2. **Text preprocessing:** tokenisation, stop-word removal, stemming (Snowball).
+3. **Representation:** bag-of-words vectors, implemented from scratch.
+4. **Pair features:** cosine similarity between the two summaries, cosine similarity between the
+   two descriptions, same product (0/1), same component (0/1).
+5. **Model:** logistic regression trained on the labelled pairs (duplicate = 1, not duplicate = −1),
+   evaluated on a separate validation set.
 
-## 📖 Présentation
+## Run
 
-Les bugs logiciels sont fréquents en raison de la complexité des systèmes. Pour gérer ces problèmes, les entreprises utilisent des systèmes de suivi des bugs (**BTS**), permettant aux développeurs, testeurs, et même utilisateurs de signaler de nouveaux bugs en remplissant un formulaire.
+```bash
+pip install numpy scikit-learn nltk beautifulsoup4 matplotlib
+jupyter notebook TP_bug_reports.ipynb
+```
 
-### 🐞 Les champs principaux d'un rapport de bug :
-- **Données catégorielles** :
-  - Exemples : composant, version, produit.
-  - Ces champs acceptent des valeurs fixes provenant d'une liste d'options prédéfinies.
-- **Résumé** et **description** :
-  - Champ texte où les utilisateurs décrivent librement le bug.
-  - Contraintes : le résumé a une limite maximale de caractères.
-
-### ⚠️ Problème : Les rapports de bugs en double
-Le manque de communication et de synchronisation entre utilisateurs peut entraîner la soumission répétée d’un même bug. Cela complique la gestion des bugs et alourdit les processus de suivi.
-
-### 🎯 Objectif du TP
-Développer un système capable de prédire si une **paire de rapports de bug soumis** sont **dupliqués** ou non. Ce système pourra être intégré dans un BTS pour identifier automatiquement les rapports dupliqués et améliorer la gestion des bugs.
-
----
-
-## 💾 Fichier de données
-- Les données nécessaires sont disponibles sous forme d'un fichier JSON (disponible sur demande).
-
----
-
-## 🔧 Technologies et outils suggérés
-- **Python** : pour le traitement des données et le développement du modèle.
-- **Bibliothèques suggérées** :
-  - `scikit-learn` pour les modèles de machine learning.
-  - `pandas` et `numpy` pour le traitement des données.
-  - `matplotlib` et `seaborn` pour la visualisation.
-  - `beautifulsoup` pour scraper des données.
-
----
-
-## ✍️ Auteur original
-**Irving Muller Rodrigues**
-
----
-
-Si vous avez des questions ou besoin d'assistance, n'hésitez pas à demander ! 😊
+The bug report archive (HTML pages and the training and validation pairs) came with the course
+and is not redistributed. Assignment designed by Irving Muller Rodrigues for a data mining course;
+solved as part of my Bachelor's degree in AI at Université Côte d'Azur (November 2024). The
+notebook is in French and English.
